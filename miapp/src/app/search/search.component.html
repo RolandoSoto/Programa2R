@@ -1,0 +1,45 @@
+<ActionBar class="action-bar">
+  <NavigationButton visibility="hidden"></NavigationButton>
+  <GridLayout columns="50, *">
+    <Label class="action-bar-title" text="Search" colSpan="2"></Label>
+    <Label class="fas" text="&#xf0c9;" (tap)="onDrawerButtonTap()"></Label>
+  </GridLayout>
+</ActionBar>
+
+<GridLayout rows="auto, auto, auto, *" class="pagina">
+  <!-- Formulario de búsqueda: two-way binding + validador personalizado -->
+  <TextField
+    row="0"
+    hint="Buscar producto o categoría (mín. 3 letras)"
+    [(ngModel)]="texto"
+    (ngModelChange)="filtrar($event)"
+    minLen="3"
+    #campo="ngModel"
+    class="input"
+  ></TextField>
+  <Label row="1" *ngIf="campo.hasError('minLen')" text="Escribe al menos 3 caracteres" class="error"></Label>
+  <Label row="2" text="Toca un ítem para ver el detalle. Mantén presionada la estrella para marcar favorito." textWrap="true" class="ayuda"></Label>
+
+  <!-- Pull to refresh envolviendo el ListView -->
+  <PullToRefresh row="3" (refresh)="onRefresh($event)">
+    <ListView [items]="resultados" (itemTap)="onItemTap($event)" class="lista">
+      <ng-template let-p="item">
+        <!-- Plantilla anidada con FlexboxLayout -->
+        <FlexboxLayout class="fila" flexDirection="row" alignItems="center" justifyContent="space-between">
+          <StackLayout flexGrow="1">
+            <Label [text]="p.nombre" class="fila-nombre"></Label>
+            <Label [text]="p.categoria + ' · $' + p.precio" class="fila-sub"></Label>
+          </StackLayout>
+          <Label text="&#xf02b;" class="fas icono" (tap)="elegirCategoria($event, p)"></Label>
+          <Label
+            text="&#xf005;"
+            class="icono estrella"
+            [class.fas]="p.favorito"
+            [class.far]="!p.favorito"
+            (longPress)="toggleFavorito($event, p)"
+          ></Label>
+        </FlexboxLayout>
+      </ng-template>
+    </ListView>
+  </PullToRefresh>
+</GridLayout>

@@ -1,0 +1,12 @@
+<ActionBar title="Detalle" class="action-bar">
+  <NavigationButton text="Atrás" android.systemIcon="ic_menu_back" (tap)="volver()"></NavigationButton>
+</ActionBar>
+
+<StackLayout class="p-20" *ngIf="producto">
+  <Image src="res://icono_productos" width="80" height="80"></Image>
+  <Label [text]="producto.nombre" class="h2"></Label>
+  <Label [text]="'Categoría: ' + producto.categoria" class="h3"></Label>
+  <Label [text]="'Precio: $' + producto.precio" class="h3"></Label>
+  <Label [text]="producto.descripcion" textWrap="true"></Label>
+  <Label [text]="producto.favorito ? '★ Favorito' : '☆ No es favorito'" class="m-t-10"></Label>
+</StackLayout>
